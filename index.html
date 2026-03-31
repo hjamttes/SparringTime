@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Access Pad</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: #000;
+        color: #ff2a2a;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        text-align: center;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        color: #ff2a2a;
+        letter-spacing: 2px;
+    }
+
+    .display {
+        font-size: 2rem;
+        letter-spacing: 10px;
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 2px solid #ff2a2a;
+        width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .keypad {
+        display: grid;
+        grid-template-columns: repeat(3, 80px);
+        gap: 10px;
+        justify-content: center;
+    }
+
+    button {
+        padding: 20px;
+        font-size: 1.5rem;
+        background: #111;
+        color: #ff2a2a;
+        border: 2px solid #ff2a2a;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        background: #ff2a2a;
+        color: #000;
+    }
+
+    .enter {
+        grid-column: span 3;
+        background: #ff2a2a;
+        color: #000;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>ACCESS PANEL</h1>
+
+    <div id="display" class="display"></div>
+
+    <div class="keypad">
+        <button onclick="press('1')">1</button>
+        <button onclick="press('2')">2</button>
+        <button onclick="press('3')">3</button>
+        <button onclick="press('4')">4</button>
+        <button onclick="press('5')">5</button>
+        <button onclick="press('6')">6</button>
+        <button onclick="press('7')">7</button>
+        <button onclick="press('8')">8</button>
+        <button onclick="press('9')">9</button>
+        <button onclick="clearCode()">C</button>
+        <button onclick="press('0')">0</button>
+        <button onclick="backspace()">⌫</button>
+
+        <button class="enter" onclick="submitCode()">ENTER</button>
+    </div>
+</div>
+
+<script>
+    let input = "";
+
+    // EASY TO ADD MORE CODES HERE
+    const codes = {
+        "0117": "sparring time.apk"
+        // "1234": "anotherfile.apk"
+    };
+
+    function press(num) {
+        if (input.length < 4) {
+            input += num;
+            updateDisplay();
+        }
+    }
+
+    function backspace() {
+        input = input.slice(0, -1);
+        updateDisplay();
+    }
+
+    function clearCode() {
+        input = "";
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        document.getElementById("display").textContent = input.padEnd(4, "_");
+    }
+
+    function submitCode() {
+        if (input.length !== 4) return;
+
+        if (codes[input]) {
+            const file = codes[input];
+
+            const link = document.createElement("a");
+            link.href = encodeURIComponent(file);
+            link.href = file; // GitHub Pages needs raw path, this line ensures override safety
+            link.download = file;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            clearCode();
+        } else {
+            alert("ACCESS DENIED");
+            clearCode();
+        }
+    }
+
+    updateDisplay();
+</script>
+
+</body>
+</html>
